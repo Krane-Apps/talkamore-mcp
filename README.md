@@ -57,9 +57,9 @@ Settings → Connectors → Add custom connector, paste the URL, and approve in 
 
 ChatGPT supports custom MCP connectors through Developer mode, with full read and write tools:
 
-1. On the web app: Settings → Apps → Advanced settings → enable **Developer mode**
-2. Add a connector with `https://api.talkamore.com/mcp` — ChatGPT runs the OAuth flow (client ID metadata documents; no registration step)
-3. The wiki tools appear in your conversations
+1. On the web app: Settings → **Security and login** → turn on **Developer mode**
+2. Settings → **Plugins** → **+** → create a connector with `https://api.talkamore.com/mcp` (auth: OAuth) — ChatGPT runs the browser sign-in flow (client ID metadata documents; no registration step)
+3. In a chat, pick the connector under the composer's **Developer mode** tool — the wiki tools appear in your conversations
 
 On the free tier, use the capsule import at [talkamore.com/wiki](https://talkamore.com/wiki) instead: ask ChatGPT what it knows about you, paste the answer, and the maintainer files it into pages.
 
