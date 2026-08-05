@@ -57,9 +57,15 @@ Add to `~/.cursor/mcp.json`, then restart Cursor:
 
 Settings → Connectors → Add custom connector, then paste your URL.
 
-### ChatGPT
+### ChatGPT (Plus, Pro, Business)
 
-ChatGPT's consumer connector support is limited today. The supported path is the capsule import at [talkamore.com/wiki](https://talkamore.com/wiki): ask ChatGPT what it knows about you, paste the answer, and the maintainer files it into pages.
+ChatGPT supports custom MCP connectors through Developer mode, with full read and write tools:
+
+1. On the web app: Settings → Apps → Advanced settings → enable **Developer mode**
+2. Add a connector with your URL: `https://api.talkamore.com/mcp/YOUR_TOKEN` (auth: none — the token is the auth)
+3. The wiki tools appear in your conversations
+
+On the free tier, use the capsule import at [talkamore.com/wiki](https://talkamore.com/wiki) instead: ask ChatGPT what it knows about you, paste the answer, and the maintainer files it into pages.
 
 ## Use it
 
