@@ -1,0 +1,90 @@
+# Talkamore MCP server
+
+A wiki about your life that writes itself — exposed as a remote [MCP](https://modelcontextprotocol.io) server, so the AI you already use can read and write it.
+
+Every day you work things out in ChatGPT, Claude, or Cursor — decisions, plans, things you learned — and lose them when the chat ends. Talkamore is the memory layer that fixes that, built on the pattern from [Karpathy's LLM-wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f): instead of machine-written memory fragments, an LLM maintainer files what you say into persistent, cross-linked wiki pages about your people, projects, and themes. Each claim carries a receipt back to the day you said it. You can read your memory like a document, edit it like a document, and the maintainer respects your edits — after you touch a page it only ever appends.
+
+This repo is the public integration reference. The server itself is hosted at `api.talkamore.com` — there is nothing to install or run.
+
+Listed on the official MCP registry as [`com.talkamore/wiki`](https://registry.modelcontextprotocol.io/v0/servers?search=talkamore).
+
+## Tools
+
+| Tool | What it does |
+|---|---|
+| `save_to_wiki` | File content into the wiki. The maintainer decides which pages it touches and links them. |
+| `list_wiki_index` | The wiki's index: every page with its slug and kind (person / project / theme / synthesis / note). |
+| `search_wiki` | Hybrid search (keyword-gated, semantically ranked) across all pages. Returns snippets. |
+| `read_wiki_page` | One page in full, by slug (for example `people/rohan`, or `index`). |
+
+## Get your connector URL
+
+1. Sign in at [talkamore.com/wiki](https://talkamore.com/wiki)
+2. Open **Connect AIs**
+3. Generate your token — it is shown once
+
+Your URL looks like:
+
+```
+https://api.talkamore.com/mcp/YOUR_TOKEN
+```
+
+Transport is streamable HTTP (stateless JSON-RPC). The token is the whole auth — treat the URL as a secret.
+
+## Connect
+
+### Claude Code
+
+```bash
+claude mcp add --transport http talkamore https://api.talkamore.com/mcp/YOUR_TOKEN
+```
+
+### Cursor
+
+Add to `~/.cursor/mcp.json`, then restart Cursor:
+
+```json
+{
+  "mcpServers": {
+    "talkamore": {
+      "url": "https://api.talkamore.com/mcp/YOUR_TOKEN"
+    }
+  }
+}
+```
+
+### Claude Desktop and claude.ai
+
+Settings → Connectors → Add custom connector, then paste your URL.
+
+### ChatGPT
+
+ChatGPT's consumer connector support is limited today. The supported path is the capsule import at [talkamore.com/wiki](https://talkamore.com/wiki): ask ChatGPT what it knows about you, paste the answer, and the maintainer files it into pages.
+
+## Use it
+
+End of a session:
+
+> save this to my talkamore wiki
+
+Start of the next one:
+
+> check my talkamore wiki about the launch plan
+
+The point is the loop: what you work out in one chat is waiting in the next, in any client, and it compounds instead of resetting.
+
+## Security
+
+- The raw token is shown once; only a SHA-256 digest is stored server-side
+- Rotate the token any time from the same screen — the old URL dies immediately
+- All wiki content is encrypted at rest with per-user keys (envelope encryption)
+- The server is scoped per token to one user's wiki; there is no cross-user surface
+
+## Links
+
+- Product: [talkamore.com](https://talkamore.com)
+- The wiki surface: [talkamore.com/wiki](https://talkamore.com/wiki)
+- Registry entry: [`com.talkamore/wiki`](https://registry.modelcontextprotocol.io/v0/servers?search=talkamore)
+- The idea this implements: [karpathy/llm-wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
+
+Questions or problems: team@talkamore.com

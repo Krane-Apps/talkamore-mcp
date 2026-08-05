@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.talkamore/wiki",
+  "description": "A wiki about your life that writes itself. Save from any AI chat, recall it in the next.",
+  "version": "1.0.0",
+  "websiteUrl": "https://talkamore.com/wiki",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.talkamore.com/mcp/{token}",
+      "variables": {
+        "token": {
+          "description": "Your personal Talkamore connector token. Generate it at https://talkamore.com/wiki under Connect other AIs - it is shown once.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      }
+    }
+  ]
+}
