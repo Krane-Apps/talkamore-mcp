@@ -17,37 +17,33 @@ Listed on the official MCP registry as [`com.talkamore/wiki`](https://registry.m
 | `search_wiki` | Hybrid search (keyword-gated, semantically ranked) across all pages. Returns snippets. |
 | `read_wiki_page` | One page in full, by slug (for example `people/rohan`, or `index`). |
 
-## Get your connector URL
-
-1. Sign in at [talkamore.com/wiki](https://talkamore.com/wiki)
-2. Open **Connect AIs**
-3. Generate your token — it is shown once
-
-Your URL looks like:
-
-```
-https://api.talkamore.com/mcp/YOUR_TOKEN
-```
-
-Transport is streamable HTTP (stateless JSON-RPC). The token is the whole auth — treat the URL as a secret.
-
 ## Connect
+
+One URL, no token:
+
+```
+https://api.talkamore.com/mcp
+```
+
+Add it to your client and a browser opens to sign in (or sign up) and approve — OAuth 2.1 with PKCE, handled natively by every client below. Transport is streamable HTTP (stateless JSON-RPC).
 
 ### Claude Code
 
 ```bash
-claude mcp add --transport http talkamore https://api.talkamore.com/mcp/YOUR_TOKEN
+claude mcp add --transport http talkamore https://api.talkamore.com/mcp
 ```
+
+Then run `/mcp` and pick **Authenticate**.
 
 ### Cursor
 
-Add to `~/.cursor/mcp.json`, then restart Cursor:
+Add to `~/.cursor/mcp.json`, then restart Cursor and approve the sign-in prompt:
 
 ```json
 {
   "mcpServers": {
     "talkamore": {
-      "url": "https://api.talkamore.com/mcp/YOUR_TOKEN"
+      "url": "https://api.talkamore.com/mcp"
     }
   }
 }
@@ -55,17 +51,21 @@ Add to `~/.cursor/mcp.json`, then restart Cursor:
 
 ### Claude Desktop and claude.ai
 
-Settings → Connectors → Add custom connector, then paste your URL.
+Settings → Connectors → Add custom connector, paste the URL, and approve in the browser.
 
 ### ChatGPT (Plus, Pro, Business)
 
 ChatGPT supports custom MCP connectors through Developer mode, with full read and write tools:
 
 1. On the web app: Settings → Apps → Advanced settings → enable **Developer mode**
-2. Add a connector with your URL: `https://api.talkamore.com/mcp/YOUR_TOKEN` (auth: none — the token is the auth)
+2. Add a connector with `https://api.talkamore.com/mcp` — ChatGPT runs the OAuth flow (client ID metadata documents; no registration step)
 3. The wiki tools appear in your conversations
 
 On the free tier, use the capsule import at [talkamore.com/wiki](https://talkamore.com/wiki) instead: ask ChatGPT what it knows about you, paste the answer, and the maintainer files it into pages.
+
+### Manual setup (token URL)
+
+For clients that cannot open a sign-in browser, a personal token URL still works: sign in at [talkamore.com/wiki](https://talkamore.com/wiki), open **Connect AIs** → **Manual setup**, and use `https://api.talkamore.com/mcp/YOUR_TOKEN`. The token is the whole auth — treat that URL as a secret.
 
 ## Use it
 
@@ -81,10 +81,11 @@ The point is the loop: what you work out in one chat is waiting in the next, in 
 
 ## Security
 
-- The raw token is shown once; only a SHA-256 digest is stored server-side
-- Rotate the token any time from the same screen — the old URL dies immediately
+- OAuth: S256 PKCE only, single-use 60s authorization codes, refresh rotation — reuse of a rotated token revokes the whole grant
+- Disconnect any client from talkamore.com/wiki; its next call is refused
+- Tokens and codes are stored as SHA-256 digests only
 - All wiki content is encrypted at rest with per-user keys (envelope encryption)
-- The server is scoped per token to one user's wiki; there is no cross-user surface
+- Every credential is scoped to one user's wiki; there is no cross-user surface
 
 ## Links
 
