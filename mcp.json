@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "talkamore": {
+      "url": "https://api.talkamore.com/mcp"
+    }
+  }
+}
