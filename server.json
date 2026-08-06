@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.talkamore/wiki",
   "description": "A wiki about your life that writes itself. Save from any AI chat, recall it in the next.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "websiteUrl": "https://talkamore.com/wiki",
   "remotes": [
     {
